@@ -1,25 +1,37 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux"; // ✅ Import Redux hook
+import { useDispatch } from "react-redux";
+import { Menu, Search, ShoppingBag, User, X } from "lucide-react";
 import logo from "../../assets/logo/awaitstore-logo.svg";
-import { Satellite } from "lucide-react";
-import { logout } from "../../store/slices/authSlice";
 import useCartCount from "../../features/cart/hooks/useCartCount";
-import { clearGuestCart } from "../../store/slices/cartSlice";
 import { useGetSubCategoriesQuery } from "../../pages/home/api/productHomeApi";
+import { openCart } from "../../store/slices/uiSlice";
+
+const SearchBox = ({ value, onChange, onSubmit, autoFocus, className = "" }) => (
+  <form onSubmit={onSubmit} role="search" className={className}>
+    <label className="relative block">
+      <span className="sr-only">Search products</span>
+      <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      <input
+        type="search"
+        className="h-11 w-full rounded-full border border-transparent bg-gray-100 pl-10 pr-4 text-sm outline-none transition placeholder:text-gray-500 focus:border-brand-300 focus:bg-white focus:ring-4 focus:ring-brand-100"
+        placeholder="Search protein, vitamins, creatine…"
+        value={value}
+        onChange={onChange}
+        autoFocus={autoFocus}
+      />
+    </label>
+  </form>
+);
 
 const Navbar = ({ onCartClick }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [q, setQ] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { data: categoryData } = useGetSubCategoriesQuery();
   const categories = categoryData?.categories || [];
-  // const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch()
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   const cartCount = useCartCount();
-
-
 
   const onSearch = (e) => {
     e.preventDefault();
@@ -29,167 +41,101 @@ const Navbar = ({ onCartClick }) => {
     navigate(`/search?q=${encodeURIComponent(term)}`);
   };
 
-  const handleLogOut = () => {
-    dispatch(logout())
-    dispatch(clearGuestCart())
-    
-  }
-
-
-
-  // if (loading) {
-  //   return <p className="text-center py-10">Loading...</p>;
-  // }
+  const handleCart = onCartClick ?? (() => dispatch(openCart()));
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-white backdrop-blur">
-      {/* --- Top Nav --- */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Left: Hamburger + Logo */}
-          <div className="flex items-center gap-3">
-            <button
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border md:hidden"
-              onClick={() => setMobileOpen((open) => !open)}
-              aria-label="Toggle search"
-              aria-expanded={mobileOpen}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+    <>
+      {/* Announcement bar */}
+      <div className="bg-brand-900 text-white">
+        <p className="page flex h-8 items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-xs font-medium">
+          <span>Free delivery on every order</span>
+          <span aria-hidden="true" className="text-brand-300">•</span>
+          <span>Cash on delivery</span>
+          <span aria-hidden="true" className="hidden text-brand-300 sm:inline">•</span>
+          <span className="hidden sm:inline">100% authentic products</span>
+        </p>
+      </div>
 
-            <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-950 text-white">
-                <img src={logo} alt="AwaitStore" />
-              </div>
-              <span className="text-lg font-semibold tracking-tight">
-                AwaitStore
-              </span>
-            </Link>
-          </div>
-
-          {/* Search */}
-          <form
-            onSubmit={onSearch}
-            className="hidden flex-1 md:block md:max-w-xl"
+      <header className="sticky top-0 z-40 border-b border-gray-200/80 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/80">
+        <div className="page flex h-16 items-center gap-3 md:gap-6">
+          <button
+            className="-ml-1 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-700 hover:bg-gray-100 md:hidden"
+            onClick={() => setMobileOpen((open) => !open)}
+            aria-label="Toggle search"
+            aria-expanded={mobileOpen}
           >
-            <div className="relative">
-              <input
-                className="w-full rounded-2xl border px-4 py-2.5 pr-10 outline-none focus:ring-2"
-                placeholder="Search products, brands…"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-              />
-              <button
-                type="submit"
-                className="absolute right-1 top-1/2 -translate-y-1/2 rounded-xl px-3 py-1.5 hover:bg-gray-100"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <circle cx="11" cy="11" r="7" />
-                  <path d="M21 21l-4.3-4.3" />
-                </svg>
-              </button>
-            </div>
-          </form>
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
 
-          {/* Right: Account + Cart */}
-          <div className="flex items-center gap-1">
+          <Link to="/" className="flex shrink-0 items-center gap-2" aria-label="AwaitStore home">
+            <img src={logo} alt="" width="30" height="36" className="h-9 w-[30px]" />
+            <span className="text-lg font-extrabold tracking-tight text-brand-900">
+              Await<span className="text-accent-700">Store</span>
+            </span>
+          </Link>
+
+          <SearchBox value={q} onChange={(e) => setQ(e.target.value)} onSubmit={onSearch} className="hidden flex-1 md:block md:max-w-xl lg:mx-auto" />
+
+          <div className="ml-auto flex items-center gap-1">
             <NavLink
               to="/profile"
-              className="inline-flex items-center gap-2 rounded-xl px-3 py-2 hover:bg-gray-100"
+              className="hidden items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 sm:inline-flex"
             >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M20 21a8 8 0 1 0-16 0" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-              <span className="hidden sm:inline">Account</span>
+              <User className="h-5 w-5" />
+              <span className="hidden lg:inline">Account</span>
             </NavLink>
-            {isAuthenticated && <div>
-              <button
-                onClick={handleLogOut}
-                className="bg-red-300 px-1 rounded cursor-pointer sm:inline">logOut</button>
-            </div>}
-
-            <div className="relative">
-              <button
-                onClick={onCartClick}
-                className="relative inline-flex items-center gap-2 rounded-xl px-3 py-2 hover:bg-gray-100"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-6 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M6 6h15l-1.5 9h-12z" />
-                  <path d="M6 6l-2-2" />
-                  <circle cx="9" cy="20" r="1.5" />
-                  <circle cx="18" cy="20" r="1.5" />
-                </svg>
-              </button>
-
-              {/* ✅ Only show badge if cart has items */}
+            <button
+              onClick={handleCart}
+              className="relative inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+              aria-label={`Cart, ${cartCount} item${cartCount === 1 ? "" : "s"}`}
+            >
+              <ShoppingBag className="h-5 w-5" />
+              <span className="hidden lg:inline">Cart</span>
               {cartCount > 0 && (
-                <span className="absolute bottom-7 right-0.5 min-w-5 flex items-center justify-center rounded-full bg-gray-900 px-1.5 text-xs font-medium text-white">
+                <span className="absolute right-0.5 top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-accent-700 px-1 text-[11px] font-bold text-white lg:static lg:ml-0.5">
                   {cartCount}
                 </span>
               )}
-            </div>
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* --- Mobile Search --- */}
-      {mobileOpen && (
-        <form onSubmit={onSearch} className="px-4 pb-3 md:hidden">
-          <input
-            className="w-full rounded-2xl border px-4 py-2.5 outline-none focus:ring-2"
-            placeholder="Search products, brands…"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            autoFocus
-          />
-        </form>
-      )}
+        {/* Mobile search */}
+        {mobileOpen && (
+          <div className="page pb-3 md:hidden">
+            <SearchBox value={q} onChange={(e) => setQ(e.target.value)} onSubmit={onSearch} autoFocus />
+          </div>
+        )}
 
-      {/* --- Categories Row --- */}
-      <nav className="bg-gray-50 border-t border-gray-200 scrollbar-hide overflow-x-scroll">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-          <ul className="flex space-x-6">
+        {/* Categories row: fixed height so it doesn't shift the page when categories load */}
+        <nav aria-label="Categories" className="border-t border-gray-100">
+          <ul className="page flex h-11 items-center gap-1 overflow-x-auto scrollbar-hide">
+            <li>
+              <NavLink
+                to="/search"
+                className={({ isActive }) =>
+                  `block whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium transition ${isActive ? "bg-brand-700 text-white" : "text-gray-700 hover:bg-gray-100"}`
+                }
+              >
+                All products
+              </NavLink>
+            </li>
             {categories.map((cat) => (
-              <li key={cat._id} className="relative group">
+              <li key={cat._id}>
                 <NavLink
-                  to={`/categories/${cat._id}`} // 👈 dynamic category route
-                  className="block py-3 font-medium hover:text-blue-600 text-sm whitespace-nowrap"
+                  to={`/categories/${cat._id}`}
+                  className={({ isActive }) =>
+                    `block whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium transition ${isActive ? "bg-brand-700 text-white" : "text-gray-700 hover:bg-gray-100"}`
+                  }
                 >
                   {cat.name}
                 </NavLink>
               </li>
             ))}
           </ul>
-        </div>
-      </nav>
-    </header>
+        </nav>
+      </header>
+    </>
   );
 };
 

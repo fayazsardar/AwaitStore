@@ -3,7 +3,7 @@ import React from "react";
 const PaymentSelection = ({ selectedMethod, setSelectedMethod }) => {
 
   return (
-    <div className="border border-gray-300 rounded-md p-4 bg-gray-50 shadow-sm">
+    <div className="rounded-2xl border border-gray-200/80 bg-white p-4 shadow-card">
       <h2 className="text-lg font-semibold text-gray-800 mb-2">
         Payment Method
       </h2>

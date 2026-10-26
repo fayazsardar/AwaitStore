@@ -1,82 +1,31 @@
 import React from "react";
 
+// Mirrors the ProductDetail layout so nothing jumps when the product arrives
 const ProductDetailSkeleton = () => {
   return (
-    <div className="bg-white animate-pulse">
-      <div className="max-w-7xl mx-auto p-4 grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left - Product Images Skeleton */}
-        <div className="flex flex-col items-center">
-          <div className="w-80 h-80 bg-gray-200 rounded-lg" />
-          <div className="flex gap-2 mt-4 flex-wrap">
-            {Array(4)
-              .fill(0)
-              .map((_, i) => (
-                <div
-                  key={i}
-                  className="w-16 h-16 bg-gray-200 rounded-lg"
-                ></div>
-              ))}
+    <div className="page py-4 sm:py-6" aria-busy="true" aria-label="Loading product">
+      <div className="skeleton mb-4 h-5 w-48 rounded" />
+      <div className="grid gap-6 md:grid-cols-2 lg:gap-12">
+        <div>
+          <div className="skeleton aspect-square rounded-3xl" />
+          <div className="mt-3 flex gap-2">
+            {Array.from({ length: 2 }, (_, i) => (
+              <div key={i} className="skeleton h-16 w-16 rounded-xl sm:h-20 sm:w-20" />
+            ))}
           </div>
         </div>
-
-        {/* Right - Info Skeleton */}
-        <div className="flex flex-col space-y-4">
-          <div className="w-48 h-6 bg-gray-200 rounded"></div>
-          <div className="w-32 h-4 bg-gray-200 rounded"></div>
-          <div className="w-24 h-8 bg-gray-200 rounded"></div>
-
-          {/* Variant Selector */}
-          <div className="space-y-2 mt-4">
-            <div className="w-32 h-4 bg-gray-200 rounded"></div>
-            <div className="flex gap-3 flex-wrap">
-              {Array(3)
-                .fill(0)
-                .map((_, i) => (
-                  <div key={i} className="w-24 h-10 bg-gray-200 rounded-lg"></div>
-                ))}
-            </div>
+        <div className="space-y-4">
+          <div className="skeleton h-8 w-3/4 rounded" />
+          <div className="skeleton h-5 w-40 rounded" />
+          <div className="skeleton h-24 w-full rounded-2xl" />
+          <div className="skeleton h-5 w-24 rounded" />
+          <div className="flex gap-2">
+            {Array.from({ length: 3 }, (_, i) => (
+              <div key={i} className="skeleton h-14 w-24 rounded-xl" />
+            ))}
           </div>
-
-          {/* Weight Selector */}
-          <div className="space-y-2 mt-4">
-            <div className="w-32 h-4 bg-gray-200 rounded"></div>
-            <div className="flex gap-3 flex-wrap">
-              {Array(3)
-                .fill(0)
-                .map((_, i) => (
-                  <div key={i} className="w-24 h-12 bg-gray-200 rounded-lg"></div>
-                ))}
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-4 mt-6">
-            <div className="flex-1 h-12 bg-gray-200 rounded-xl"></div>
-            <div className="flex-1 h-12 bg-gray-200 rounded-xl"></div>
-          </div>
-
-          {/* Features */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 text-sm">
-            {Array(4)
-              .fill(0)
-              .map((_, i) => (
-                <div key={i} className="flex flex-col items-center">
-                  <div className="w-8 h-8 bg-gray-200 rounded-full mb-2"></div>
-                  <div className="w-20 h-3 bg-gray-200 rounded"></div>
-                </div>
-              ))}
-          </div>
+          <div className="skeleton h-12 w-full rounded-xl" />
         </div>
-      </div>
-
-      {/* Tabs Section Skeleton */}
-      <div className="max-w-7xl mx-auto p-4 mt-10 space-y-2">
-        <div className="w-40 h-6 bg-gray-200 rounded"></div>
-        {Array(3)
-          .fill(0)
-          .map((_, i) => (
-            <div key={i} className="w-full h-4 bg-gray-200 rounded"></div>
-          ))}
       </div>
     </div>
   );

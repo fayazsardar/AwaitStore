@@ -17,13 +17,17 @@ const AuthPopUp = ({ onClose }) => {
    
    
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50 px-4">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-gray-950/50 px-0 backdrop-blur-sm sm:items-center sm:px-4">
       {/* Popup container */}
-      <div className="bg-white w-full max-w-sm rounded-lg shadow-lg p-6 relative">
+      <div className="relative w-full rounded-t-3xl bg-white p-6 pb-8 shadow-2xl sm:max-w-sm sm:rounded-3xl sm:pb-6"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Log in">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-black"
+          className="absolute right-3 top-3 rounded-full p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+          aria-label="Close"
         >
           <X size={20} />
         </button>

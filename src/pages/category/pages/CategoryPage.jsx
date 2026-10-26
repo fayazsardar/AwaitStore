@@ -1,84 +1,60 @@
-import React from 'react'
-import banner from '../../../assets/Banners/Container.png'
-import { ProductCard } from '../../../features/products/components/ProductCard'
+import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { ChevronRight } from 'lucide-react'
 import { useFetchProductsByCategoryQuery } from '../api/categoryPageApi'
-import { ProductCardShimmer } from '../../../features/products/components/skeletons/ProductCardShimmer'
-import NoDataFoundBox from '../../../components/common/NoDataFoundBox'
-
-
+import { useGetSubCategoriesQuery } from '../../home/api/productHomeApi'
+import ProductGrid from '../../../features/products/components/ProductGrid'
+import SortSelect from '../../../features/products/components/SortSelect'
+import { sortProducts } from '../../../features/products/utils/sortProducts'
+import useDocumentTitle from '../../../utils/useDocumentTitle'
 
 export const CategoryPage = () => {
     const { id } = useParams();
+    const [sort, setSort] = useState('popular');
 
     const { data: productsByCategory, isLoading: loadingProducts } = useFetchProductsByCategoryQuery(id);
-
-
-
-
+    const { data: categoryData } = useGetSubCategoriesQuery();
+    const category = categoryData?.categories?.find((c) => c._id === id);
+    const products = sortProducts(productsByCategory?.data || [], sort);
+    useDocumentTitle(category?.name);
 
     return (
-        <div className="max-w-7xl mx-auto px-1 py-0.5  sm:px-0.5 ">
-            <div className="w-full h-30 overflow-hidden  mb-3.5 sm:h-64 md:h-80 lg:h-96 " >
-                <img className=' h-full object-fill' src={banner} alt="banner" />
+        <div className="page py-4 sm:py-6">
+            {/* Breadcrumbs */}
+            <nav aria-label="Breadcrumb" className="mb-4 flex items-center gap-1 text-sm text-gray-500">
+                <Link to="/" className="hover:text-gray-900">Home</Link>
+                <ChevronRight className="h-4 w-4" />
+                <span className="font-medium text-gray-900">{category?.name || 'Category'}</span>
+            </nav>
+
+            {/* Header (fixed height: no layout shift when the name/count arrive) */}
+            <div
+                className="relative mb-6 flex min-h-32 items-center overflow-hidden rounded-3xl px-6 py-6 sm:px-10"
+                style={{ backgroundColor: category?.tint || 'var(--color-brand-50)' }}
+            >
+                <div className="relative z-10">
+                    <h1 className="text-2xl font-extrabold tracking-tight sm:text-4xl">{category?.name || ' '}</h1>
+                    <p className="mt-1 text-sm text-gray-600">
+                        {loadingProducts ? ' ' : `${products.length} product${products.length === 1 ? '' : 's'}`}
+                    </p>
+                </div>
+                {category?.thumbnail && (
+                    <img
+                        src={category.thumbnail}
+                        alt=""
+                        width="400"
+                        height="400"
+                        className="absolute -bottom-6 right-2 h-40 w-40 object-contain opacity-90 sm:right-10 sm:h-44 sm:w-44"
+                    />
+                )}
             </div>
 
-
-
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-
-                <h1 className="text-2xl font-bold capitalize">Supplements</h1>
-
-                {/* Sort Dropdown */}
-                <select className="mt-2 sm:mt-0 border rounded-xl px-3 py-2">
-                    <option>Sort by</option>
-                    <option>Price: Low → High</option>
-                    <option>Price: High → Low</option>
-                </select>
+            <div className="mb-4 flex items-center justify-end">
+                <SortSelect value={sort} onChange={setSort} />
             </div>
 
-            {/* Grid of Products */}
-            <section className="">
-                <h2 className="text-xl font-semibold mb-6">Featured Products</h2>
-                
-                    
-
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-1 ">
-                        {/* <div className='flex gap-4 overflow-x-auto '> */}
-
-                        {loadingProducts || !productsByCategory ? (
-                            // 👇 Show shimmer while loading or before data is defined
-                            <>
-                                <ProductCardShimmer />
-                                <ProductCardShimmer />
-                                <ProductCardShimmer />
-                            </>
-                        ) : productsByCategory?.data?.length > 0 ? (
-                            // 👇 Show products when data exists
-                            productsByCategory.data.map((p) => (
-                                <ProductCard key={p._id} product={p} />
-                            ))
-                        ) : (
-                            // 👇 Show "no data" only after data load is complete
-                            <div className="col-span-full flex justify-center items-center min-h-[200px]">
-                                <NoDataFoundBox />
-                            </div>
-                        )}
-
-                    </div>
-               
-
-
-
-            </section>
-
-            {/* Pagination  */}
-            <div className="flex justify-center mt-8 space-x-2">
-                <button className="px-4 py-0.5 rounded-lg border hover:bg-gray-100">1</button>
-                <button className="px-4 py-2 rounded-lg border hover:bg-gray-100">2</button>
-                <button className="px-4 py-2 rounded-lg border hover:bg-gray-100">Next →</button>
-            </div>
+            <h2 className="sr-only">Products</h2>
+            <ProductGrid products={products} isLoading={loadingProducts} skeletons={5} eagerCount={4} />
         </div>
     )
 }

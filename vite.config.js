@@ -1,17 +1,30 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import flowbiteReact from "flowbite-react/plugin/vite";
 import { VitePWA } from 'vite-plugin-pwa'
 
-const THEME_COLOR = '#26457f'
+const THEME_COLOR = '#1c3056'
 
 // https://vite.dev/config/
+// Framework code changes rarely: keep it in its own files so browsers keep it cached across app updates
+const vendorChunk = (id) => {
+  if (!id.includes('node_modules')) return undefined
+  if (/node_modules\/(react|react-dom|scheduler)\//.test(id)) return 'react'
+  if (/node_modules\/(react-router|react-router-dom)\//.test(id)) return 'router'
+  if (/node_modules\/(@reduxjs|react-redux|redux|immer|reselect)\//.test(id)) return 'redux'
+  return undefined
+}
+
 export default defineConfig({
+  build: {
+    target: 'es2020',
+    rollupOptions: {
+      output: { manualChunks: vendorChunk },
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),
-    flowbiteReact(),
     VitePWA({
       // Ask the user before switching to a new version (see PwaPrompts.jsx)
       registerType: 'prompt',

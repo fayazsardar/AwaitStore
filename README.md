@@ -33,6 +33,20 @@ npm run preview      # http://localhost:4173
 PWA settings (name, colours, icons, shortcuts, caching) live in `vite.config.js`; icons are in
 `public/icons/`.
 
+## Design
+
+Colours, font and spacing are defined once as design tokens in `src/index.css`
+(`brand-*` navy built around the logo, `accent-*` orange for offers). Use classes like
+`bg-brand-700`, `text-accent-700` and the `page` utility (centred page width + gutters).
+
+## Performance
+
+- The HTML contains a small app shell, so the page paints before any JavaScript runs.
+- Each page is its own file; product, category and search pages are prefetched when the
+  browser is idle, and the service worker caches everything for instant repeat visits.
+- React, React Router and Redux are split into separate long-cached files.
+- Images reserve their space and placeholders match real content, so nothing jumps while loading.
+
 ## Dummy backend
 
 By default the app needs no server: every API call is answered in the browser by

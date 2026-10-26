@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { USE_MOCK_API } from "../../../app/api/mockBaseQuery";
 import { useDispatch } from "react-redux";
 import { useVerifyOtpMutation } from "../api/authApi";
 import { setCredentials } from "../../../store/slices/authSlice";
@@ -27,19 +28,25 @@ const OtpVerify = ({ mobileData }) => {
 
   return (
     <form onSubmit={handleVerify} className="space-y-4">
-      <h2 className="text-xl font-semibold text-center mb-4">Verify OTP</h2>
+      <h2 className="text-xl font-bold text-center mb-1">Verify OTP</h2>
+      <p className="text-sm text-gray-500 text-center mb-6">
+        Sent to {mobileData}{USE_MOCK_API && " · demo mode: any code works"}
+      </p>
       <input
         type="text"
+        inputMode="numeric"
+        autoComplete="one-time-code"
         value={otp}
         onChange={(e) => setOtp(e.target.value)}
         placeholder="Enter OTP"
-        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="h-12 w-full rounded-xl border border-gray-300 px-4 text-base outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
+        autoFocus
       />
       
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
+        className="h-12 w-full rounded-xl bg-brand-700 font-semibold text-white transition hover:bg-brand-800 disabled:opacity-60"
       >
         {isLoading ? "Verifying..." : "Verify OTP"}
       </button>

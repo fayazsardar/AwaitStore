@@ -1,108 +1,96 @@
-
 import { toast } from "react-toastify";
+import { useState } from "react";
+import { MapPin, Phone, Plus, Trash2 } from "lucide-react";
 import { useDeleteAddressMutation, useGetAddressesQuery } from "../api/profileApi";
 import AddAddressModal from "../components/AddAddressModal";
-import { useState } from "react";
+import useDocumentTitle from "../../../utils/useDocumentTitle";
 
 const Addresses = () => {
-  const [isAddAddressModal,setIsAddAddressModal]=useState(false)
+  useDocumentTitle("Addresses");
+  const [isAddAddressModal, setIsAddAddressModal] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+  const [deleteAddress] = useDeleteAddressMutation();
+  const { data: addressData, isLoading, isError } = useGetAddressesQuery();
 
-  const [deleteAddress,{isLoading:deleteLoading} ]=useDeleteAddressMutation()
-
-  const {
-    data:addressData,
-    isLoading,
-    isError
-  } = useGetAddressesQuery();
-console.log(addressData)
-  const handleDeleteAddress=async (id)=>{
-    console.log(id)
-    try{
-      await deleteAddress(id).unwrap()
-      toast.success("addres deleted")
-
-    }catch(err){
-      toast.error("failed")
-      console.error(err)
+  const handleDeleteAddress = async (id) => {
+    setDeletingId(id);
+    try {
+      await deleteAddress(id).unwrap();
+      toast.success("Address deleted");
+    } catch (err) {
+      toast.error(err?.data?.message || "Couldn't delete address");
+    } finally {
+      setDeletingId(null);
     }
-  }
-
-
+  };
 
   return (
-      <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded shadow flex flex-col h-[85vh]">
-      {/* Header */}
-      <div className="flex justify-between items-center p-4 border-b border-gray-200">
-        <h1 className="text-2xl font-semibold text-gray-800">My Addresses</h1>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition cursor-pointer"
-        onClick={()=>setIsAddAddressModal(true)}>
-          Add Address
+    <div>
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <h1 className="text-2xl font-extrabold tracking-tight">My addresses</h1>
+        <button
+          className="inline-flex items-center gap-1.5 rounded-full bg-brand-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-800"
+          onClick={() => setIsAddAddressModal(true)}
+        >
+          <Plus className="h-4 w-4" /> Add address
         </button>
       </div>
 
-     
+      {isAddAddressModal && <AddAddressModal handelClose={() => setIsAddAddressModal(false)} />}
+      {isLoading && (
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="skeleton h-40 rounded-2xl" />
+          <div className="skeleton h-40 rounded-2xl" />
+        </div>
+      )}
+      {isError && <p className="text-red-600">Failed to load addresses.</p>}
 
-      {/* Scrollable content */}
-      <div className="p-4 overflow-y-auto flex-1">
-         {isAddAddressModal && <AddAddressModal 
-      handelClose={()=>setIsAddAddressModal(false)}/>}
-        {isLoading && <p className="text-gray-500">Loading addresses...</p>}
-        {isError && <p className="text-red-500">Failed to load addresses.</p>}
-
-        {addressData && addressData.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {addressData.map((a) => (
-              <div
-                key={a._id}
-                className={`p-4 border rounded-lg shadow-sm hover:shadow-lg transition-shadow bg-white flex flex-col justify-between`}
-              >
-                {/* Address Info */}
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-800 mb-1">
-                    {a.firstName} {a.lastName}
-                  </h2>
-                  <p className="text-gray-600">{a.addressLine}</p>
-                  <p className="text-gray-600">
-                    {a.city}, {a.state} - {a.pincode}
-                  </p>
-                  <p className="text-gray-600">Phone: {a.mobileNumber}</p>
-
-                  <p className="text-gray-600">addressType : <span className="bg-blue-400 px-1.5 py-0.5 rounded-sm text-white">{a?.addressType }</span></p>
-                </div>
-
-                {/* Actions */}
-                <div className="flex justify-between items-center mt-4 ">
-                
-
-                  {/* Default badge / Set default */}
-                  {a.defaultAddress ? (
-                    <span className="inline-block px-3 py-2 text-xs bg-blue-100 text-blue-800 font-semibold rounded cursor-pointer">
-                      Default
-                    </span>
-                  ) : (
-                    <button className="px-2 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition text-sm cursor-pointer">
-                      Set Default
-                    </button>
-                  )}
-
-                    {/* Delete */}
-                  <button className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition cursor-pointer"
-                  onClick={()=>handleDeleteAddress(a._id)}
-                  disabled={deleteLoading}>
-                  {deleteLoading ? "deleting":   "Delete"}
-                  </button>
-                </div>
+      {addressData?.length > 0 ? (
+        <div className="grid gap-4 md:grid-cols-2">
+          {addressData.map((a) => (
+            <div key={a._id} className="flex flex-col rounded-2xl border border-gray-200/80 bg-white p-5 shadow-card">
+              <div className="mb-2 flex items-center gap-2">
+                <h2 className="text-base font-semibold">{a.firstName} {a.lastName}</h2>
+                {a.addressType && (
+                  <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700">{a.addressType}</span>
+                )}
+                {a.defaultAddress && (
+                  <span className="rounded-full bg-brand-50 px-2 py-0.5 text-xs font-semibold text-brand-800">Default</span>
+                )}
               </div>
-            ))}
+              <p className="flex gap-2 text-sm text-gray-600">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+                <span>
+                  {a.addressLine}
+                  {a.landmark ? `, ${a.landmark}` : ""}
+                  <br />
+                  {a.city}, {a.state} – {a.pincode}
+                </span>
+              </p>
+              <p className="mt-1 flex items-center gap-2 text-sm text-gray-600">
+                <Phone className="h-4 w-4 text-gray-400" /> {a.mobileNumber}
+              </p>
+              <div className="mt-4 flex justify-end border-t border-gray-100 pt-3">
+                <button
+                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-red-600 transition hover:bg-red-50 disabled:opacity-50"
+                  onClick={() => handleDeleteAddress(a._id)}
+                  disabled={deletingId === a._id}
+                >
+                  <Trash2 className="h-4 w-4" /> {deletingId === a._id ? "Deleting…" : "Delete"}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        !isLoading && !isError && (
+          <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center">
+            <MapPin className="mx-auto h-8 w-8 text-gray-400" />
+            <p className="mt-2 font-semibold">No saved addresses yet</p>
+            <p className="text-sm text-gray-500">Add one to check out faster.</p>
           </div>
-        ) : (
-          !isLoading && (
-            <p className="text-center text-gray-500 mt-6">No addresses found.</p>
-          )
-        )}
-
-        
-      </div>
+        )
+      )}
     </div>
   );
 };

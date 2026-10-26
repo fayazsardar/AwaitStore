@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { formatPrice } from "../../../utils/format";
 import { useInitiateOrderQuery } from '../api/orderApi'
 // adjust path
 
@@ -20,11 +21,11 @@ const OrderSummaryAccordion = () => {
 
     
     return (
-        <div className="border border-gray-300 rounded-md bg-gray-50 shadow-sm">
+        <div className="overflow-hidden rounded-2xl border border-gray-200/80 bg-white shadow-card">
             {/* Top section with total always visible */}
             <div className="flex justify-between items-center px-4 py-3 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-800">Grand Total</h2>
-                <span className="text-xl font-bold text-green-600">₹{totalAmount}</span>
+                <span className="text-xl font-bold text-gray-900">{formatPrice(totalAmount)}</span>
             </div>
 
             {/* Toggle button for accordion */}
@@ -33,12 +34,12 @@ const OrderSummaryAccordion = () => {
                 className="w-full flex justify-between items-center p-4 text-left"
             >
                 <span className="text-lg font-semibold text-gray-800">Order Summary</span>
-                <span className="text-blue-600 text-sm">{isOpen ? "Hide ▲" : "View ▼"}</span>
+                <span className="text-brand-700 text-sm">{isOpen ? "Hide ▲" : "View ▼"}</span>
             </button>
 
             {/* Collapsible section */}
             {isOpen && (
-                <div className="p-4 border-t border-gray-300 space-y-2">
+                <div className="p-4 border-t border-gray-200 space-y-2">
                     {removedItems.length > 0 && (
                         <div className="text-red-600 text-sm mb-2">
                             Some items were removed due to insufficient stock:
@@ -69,7 +70,7 @@ const OrderSummaryAccordion = () => {
                             {/* Quantity and subtotal */}
                             <div className="flex justify-between mt-1 text-gray-700">
                                 <span>Qty: {item.quantity}</span>
-                                <span>₹{item.subtotal}</span>
+                                <span>{formatPrice(item.subtotal)}</span>
                             </div>
                         </div>
                     ))}
@@ -81,9 +82,9 @@ const OrderSummaryAccordion = () => {
                     </div>
 
                     {/* Total */}
-                    <div className="border-t border-gray-300 pt-2 flex justify-between font-semibold text-gray-800">
+                    <div className="border-t border-gray-200 pt-2 flex justify-between font-semibold text-gray-800">
                         <span>Total</span>
-                        <span>₹{totalAmount}</span>
+                        <span>{formatPrice(totalAmount)}</span>
                     </div>
                 </div>
             )}

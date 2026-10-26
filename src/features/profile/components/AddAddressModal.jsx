@@ -47,8 +47,8 @@ const AddAddressModal = ({ handelClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 p-3">
-      <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-950/50 p-3 backdrop-blur-sm">
+      <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b">
           <h2 className="text-lg font-semibold text-gray-800">Add New Address</h2>
@@ -74,7 +74,7 @@ const AddAddressModal = ({ handelClose }) => {
                   value={formData.firstName}
                   onChange={handleChange}
                   required
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
                 />
               </div>
 
@@ -88,7 +88,7 @@ const AddAddressModal = ({ handelClose }) => {
                   value={formData.lastName}
                   onChange={handleChange}
                   required
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
                 />
               </div>
             </div>
@@ -104,7 +104,7 @@ const AddAddressModal = ({ handelClose }) => {
                   value={formData.mobileNumber}
                   onChange={handleChange}
                   required
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
                 />
               </div>
 
@@ -117,7 +117,7 @@ const AddAddressModal = ({ handelClose }) => {
                   name="altPhoneNo"
                   value={formData.altPhoneNo}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
                 />
               </div>
             </div>
@@ -131,7 +131,7 @@ const AddAddressModal = ({ handelClose }) => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
               />
             </div>
 
@@ -146,7 +146,7 @@ const AddAddressModal = ({ handelClose }) => {
                   value={formData.pincode}
                   onChange={handleChange}
                   required
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
                 />
               </div>
 
@@ -160,7 +160,7 @@ const AddAddressModal = ({ handelClose }) => {
                   value={formData.city}
                   onChange={handleChange}
                   required
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
                 />
               </div>
             </div>
@@ -173,7 +173,7 @@ const AddAddressModal = ({ handelClose }) => {
                 name="state"
                 value={formData.state}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
               >
                 <option value="">Select State</option>
                 <option>Kerala</option>
@@ -193,7 +193,7 @@ const AddAddressModal = ({ handelClose }) => {
                 value={formData.addressLine}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none resize-none"
               ></textarea>
             </div>
 
@@ -206,7 +206,7 @@ const AddAddressModal = ({ handelClose }) => {
                 name="landmark"
                 value={formData.landmark}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
               />
             </div>
 
@@ -218,7 +218,7 @@ const AddAddressModal = ({ handelClose }) => {
                 name="addressType"
                 value={formData.addressType}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
               >
                 <option>Home</option>
                 <option>Work</option>
@@ -235,7 +235,7 @@ const AddAddressModal = ({ handelClose }) => {
                 name="defaultAddress"
                 checked={formData.defaultAddress}
                 onChange={handleChange}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-brand-700 border-gray-300 rounded focus:ring-brand-500"
               />
               <label htmlFor="defaultAddress" className="text-sm text-gray-700">
                 Set as default address
@@ -256,7 +256,7 @@ const AddAddressModal = ({ handelClose }) => {
               type="submit"
               disabled={isLoading}
               className={`px-5 py-2 cursor-pointer rounded-lg text-white font-medium transition ${
-                isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+                isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-brand-700 hover:bg-brand-800"
               }`}
             >
               {isLoading ? "Saving..." : "Save Address"}

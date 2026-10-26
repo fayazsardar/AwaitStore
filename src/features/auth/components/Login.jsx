@@ -18,8 +18,8 @@ const Login = ({ onOtpSent }) => {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-center mb-4">Login</h2>
-      <p className="text-sm text-gray-600 text-center mb-6">
+      <h2 className="text-xl font-bold text-center mb-1">Log in or sign up</h2>
+      <p className="text-sm text-gray-500 text-center mb-6">
         Enter your mobile number to continue
       </p>
 
@@ -33,18 +33,20 @@ const Login = ({ onOtpSent }) => {
           </label>
           <input
             type="tel"
+            inputMode="numeric"
+            autoComplete="tel"
             id="mobile"
             value={mobile}
             onChange={(e) => setMobile(e.target.value)}
             placeholder="Enter mobile number"
-            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="h-12 w-full rounded-xl border border-gray-300 px-4 text-base outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
           />
         </div>
 
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+          className="h-12 w-full rounded-xl bg-brand-700 font-semibold text-white transition hover:bg-brand-800 disabled:opacity-60"
         >
           {isLoading ? "Sending..." : "Get OTP"}
         </button>

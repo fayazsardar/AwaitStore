@@ -4,18 +4,18 @@ import React from 'react'
 const CheckOutAdressBox = ({ address, onAdd, onChange, isLoading }) => {
 
   return (
-    <div className="border p-3 rounded-md border-gray-300 bg-gray-50 flex flex-col gap-2">
+    <div className="rounded-2xl border border-gray-200/80 bg-white p-4 shadow-card flex flex-col gap-3">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <MapPinned className="text-blue-500 w-6 h-6" />
-          <h2 className="font-medium text-gray-800 text-base">
+          <MapPinned className="text-brand-700 w-6 h-6" />
+          <h2 className="font-semibold text-gray-900 text-base">
             Delivery Address
           </h2>
         </div>
         
       </div>
 
-      <div className="border rounded-md p-4 bg-white shadow-sm hover:shadow-md transition cursor-pointer">
+      <div className="rounded-xl bg-gray-50 p-4">
         {isLoading ? (
           <p className="text-gray-500 italic">Loading address...</p>
         ) : address ? (
@@ -31,7 +31,7 @@ const CheckOutAdressBox = ({ address, onAdd, onChange, isLoading }) => {
             <div className="flex justify-end mt-2">
               <button
                 onClick={onChange}
-                className="px-2 py-0.5 bg-blue-500 text-white rounded-sm hover:bg-blue-600 transition"
+                className="rounded-full border border-brand-700 px-3 py-1 text-sm font-semibold text-brand-700 transition hover:bg-brand-50"
               >
                 Change
               </button>
@@ -42,7 +42,7 @@ const CheckOutAdressBox = ({ address, onAdd, onChange, isLoading }) => {
             <p className="text-gray-500 italic">No delivery address yet.</p>
             <button
               onClick={onAdd}
-              className="px-3 py-1.5 bg-blue-600 text-white rounded-sm hover:bg-blue-700 transition"
+              className="rounded-full bg-brand-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-800"
             >
               + Add delivery address
             </button>

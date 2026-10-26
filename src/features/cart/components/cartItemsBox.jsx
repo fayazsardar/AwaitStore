@@ -1,68 +1,60 @@
 // CartItemBox.jsx
 import React from "react";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import { formatPrice, variantLabel } from "../../../utils/format";
 
-const CartItemBox = ({
-  item,
-  variant,
-  loadingItemId,
-  handleQtyChange,
-  handleRemove,
-}) => {
-  const idToUse = variant?._id ?? item._id;
+const CartItemBox = ({ item, variant, id, isLoading, handleQtyChange, handleRemove }) => {
   const price = variant?.price ?? item.price ?? 0;
+  const name = variant?.productId?.name ?? item.name ?? variant?.name;
+  const maxQty = variant?.stock ?? 99;
 
   return (
-    <div
-      className="flex flex-col md:flex-row items-center justify-between border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200 gap-4"
-    >
-      {/* Left - Image and Name */}
-      <div className="flex items-center gap-4 w-full md:w-2/3">
-        <img
-          className="w-24 h-24 md:w-32 md:h-32 object-contain rounded-lg border p-1 bg-gray-50"
-          src={variant?.images?.[0] ?? item.image ?? ""}
-          alt={item.name ?? ""}
-        />
-        <div className="flex flex-col">
-          <p className="font-medium text-gray-800">{variant?.productId?.name ?? variant?.name ?? item.name}</p>
-          <div className="flex gap-2">
-            <p className="text-sm text-gray-500">{variant?.flavor ?? ""}</p>
-            <p className="text-sm text-gray-500">
-              {variant?.weight ?? ""} {variant?.weightType ?? ""}
-            </p>
+    <li className={`flex gap-3 py-4 transition-opacity ${isLoading ? "opacity-60" : ""}`}>
+      <img
+        className="h-20 w-20 shrink-0 rounded-xl bg-gray-50 object-contain p-1"
+        src={variant?.images?.[0] ?? item.image ?? ""}
+        alt=""
+        width="80"
+        height="80"
+      />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex items-start justify-between gap-2">
+          <p className="line-clamp-2 text-sm font-medium text-gray-900">{name}</p>
+          <button
+            onClick={() => handleRemove(id)}
+            disabled={isLoading}
+            className="-mr-1 -mt-1 rounded-full p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600"
+            aria-label={`Remove ${name} from cart`}
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
+        <p className="text-xs text-gray-500">{variantLabel(variant)}</p>
+
+        <div className="mt-auto flex items-center justify-between pt-2">
+          <div className="flex items-center rounded-full border border-gray-200">
+            <button
+              onClick={() => handleQtyChange(id, item.quantity - 1)}
+              disabled={isLoading || item.quantity <= 1}
+              className="flex h-8 w-8 items-center justify-center rounded-full text-gray-700 hover:bg-gray-100 disabled:opacity-40"
+              aria-label="Decrease quantity"
+            >
+              <Minus className="h-3.5 w-3.5" />
+            </button>
+            <span className="w-7 text-center text-sm font-semibold" aria-live="polite">{item.quantity}</span>
+            <button
+              onClick={() => handleQtyChange(id, item.quantity + 1)}
+              disabled={isLoading || item.quantity >= maxQty}
+              className="flex h-8 w-8 items-center justify-center rounded-full text-gray-700 hover:bg-gray-100 disabled:opacity-40"
+              aria-label="Increase quantity"
+            >
+              <Plus className="h-3.5 w-3.5" />
+            </button>
           </div>
-          <p className="text-sm text-gray-500 mt-1 flex items-center">
-            ₹{price} ×{" "}
-            <input
-              type="number"
-              min="1"
-              disabled={loadingItemId === idToUse}
-              value={item.quantity}
-              onChange={(e) => handleQtyChange(item._id, Number(e.target.value))}
-              className={`w-16 text-center border rounded px-1 py-0.5 ml-2 focus:outline-none focus:ring-1 focus:ring-purple-500 ${
-                loadingItemId === idToUse ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              aria-label={`Quantity for ${item.name}`}
-            />
-          </p>
+          <p className="text-sm font-bold text-gray-900">{formatPrice(price * item.quantity)}</p>
         </div>
       </div>
-
-      {/* Right - Total & Remove */}
-      <div className="flex items-center gap-7 mt-2 md:mt-0">
-        <p className="font-semibold text-gray-800 text-lg">₹ {price * item.quantity}</p>
-        {loadingItemId === idToUse ? (
-          <div className="w-6 h-6 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
-        ) : (
-          <button
-            onClick={() => handleRemove(idToUse)}
-            className="text-red-500 hover:text-red-600 text-xl font-bold cursor-pointer"
-            aria-label={`Remove ${item.name} from cart`}
-          >
-            ✕
-          </button>
-        )}
-      </div>
-    </div>
+    </li>
   );
 };
 

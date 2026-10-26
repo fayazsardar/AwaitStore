@@ -1,49 +1,43 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
-const CategorySection = ({ CategorySectionData }) => {
+import { Link } from 'react-router-dom'
+import { LayoutGrid } from 'lucide-react'
 
-    return (
-        <section className="max-w-6xl mx-auto px-4">
-            <h2 className="text-xl font-semibold mb-6">Shop by Category</h2>
+const tile = 'group flex w-24 shrink-0 flex-col items-center gap-2 text-center sm:w-auto'
+const circle = 'flex aspect-square w-full items-center justify-center overflow-hidden rounded-full ring-1 ring-black/5 transition duration-200 group-hover:-translate-y-1 group-hover:shadow-lift'
 
-            <div className="flex space-x-4 overflow-x-auto ">
-                {/* Default All Categories option */}
-                <div className='min-w-[120px] flex-shrink-0 p-4 bg-white rounded-2xl shadow hover:shadow-md text-center'>
-                    <div className="h-20 w-20 mx-auto mb-2 bg-amber-200 rounded-full flex items-center justify-center">
-                        🛒
-                    </div>
-                    <p className="font-medium">All Categories</p>
-                </div>
+const CategorySection = ({ CategorySectionData = [], isLoading }) => {
+  return (
+    <section aria-labelledby="categories-heading">
+      <div className="mb-4 flex items-end justify-between">
+        <h2 id="categories-heading" className="text-xl font-bold tracking-tight sm:text-2xl">Shop by category</h2>
+      </div>
 
-                {/* </Link> */}
+      <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-2 scrollbar-hide sm:mx-0 sm:grid sm:grid-cols-6 sm:gap-6 sm:overflow-visible sm:px-0">
+        <Link to="/search" className={tile}>
+          <span className={`${circle} bg-brand-700 text-white`}>
+            <LayoutGrid className="h-8 w-8" />
+          </span>
+          <span className="text-sm font-medium text-gray-800">All products</span>
+        </Link>
 
-                {/* Dynamic categories */}
-
-                {CategorySectionData?.length >0 ? (
-                    CategorySectionData.map((c) => (
-                    <NavLink key={c._id} to={`categories/${c._id}`}>
-                        <div className='min-w-32 min-h-full flex-shrink-0 p-4 bg-blue-400 rounded-2xl shadow hover:shadow-md text-center'>
-                            <div className="mx-auto mb-2 bg-amber-200 rounded flex items-center justify-center">
-                                <img
-                                    src={c.thumbnail} alt={c.name}
-                                    className='rounded object-cover w-full h-full'
-                                />
-                            </div>
-                            {/* <p className="font-medium">{c.name}</p> */}
-                        </div>
-
-                    </NavLink>
-
-
-                ))
-                ):(
-                     <p className="text-gray-500 ">No categories found</p>
-                )}
-
-            </div>
-        </section>
-    )
+        {isLoading
+          ? Array.from({ length: 5 }, (_, i) => (
+              <div key={i} className={tile} aria-hidden="true">
+                <span className={`${circle} skeleton`} />
+                <span className="skeleton h-4 w-16 rounded" />
+              </div>
+            ))
+          : CategorySectionData.map((c) => (
+              <Link key={c._id} to={`/categories/${c._id}`} className={tile}>
+                <span className={circle} style={{ backgroundColor: c.tint || '#f3f4f6' }}>
+                  <img src={c.thumbnail} alt="" width="400" height="400" loading="lazy" decoding="async" className="h-4/5 w-4/5 object-contain" />
+                </span>
+                <span className="text-sm font-medium text-gray-800">{c.name}</span>
+              </Link>
+            ))}
+      </div>
+    </section>
+  )
 }
 
 export default CategorySection
-

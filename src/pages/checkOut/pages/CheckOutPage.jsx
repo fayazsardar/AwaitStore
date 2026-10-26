@@ -11,6 +11,7 @@ import AddAddressModal from '../../../features/profile/components/AddAddressModa
 import { useInitiateOrderQuery, usePlaceOrderMutation } from '../api/orderApi'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { formatPrice } from '../../../utils/format'
 
 const CheckOutPage = () => {
    const { data: addressData = [], isLoading:addressLoading } = useGetAddressesQuery()
@@ -54,11 +55,11 @@ const CheckOutPage = () => {
   }, [addressData])
 
   if (addressLoading || cartLoading) {
-    return <div className="text-center py-10">Loading checkout data...</div>;
+    return <div className="space-y-4" aria-busy="true"><div className="skeleton h-40 rounded-2xl" /><div className="skeleton h-24 rounded-2xl" /><div className="skeleton h-28 rounded-2xl" /></div>;
   }
 
   return (
-     <div className="max-w-4xl mx-auto bg-white p-4 rounded shadow">
+     <div className="space-y-4">
         <div>
           <CheckOutAdressBox
           address={selectedAddress}
@@ -68,17 +69,11 @@ const CheckOutPage = () => {
            />
         </div>
 
-        <div className='mt-2'>
+        <CouponBox />
 
-          <CouponBox />
+      <PaymentSelection selectedMethod={paymentMethod} setSelectedMethod={setPaymentMethod} />
 
-        </div>
-
-      <div className='mt-4'>
-        <PaymentSelection selectedMethod={paymentMethod} setSelectedMethod={setPaymentMethod} />
-      </div>
-
-       {!cartLoading && <div className='mt-4'><OrderSummaryAccordion cartData={cartData} /></div>}
+       {!cartLoading && <OrderSummaryAccordion cartData={cartData} />}
 
        {isAddAddressModal && <AddAddressModal
        handelClose={(()=>setIsAddAddressModal(false))} />}
@@ -94,19 +89,19 @@ const CheckOutPage = () => {
       )}
 
       <div
-        className="fixed bottom-0 left-0 right-0 p-3 bg-blue-900 shadow-inner text-center"
+        className="fixed bottom-0 left-0 right-0 z-20 border-t border-gray-200 bg-white/95 p-3 backdrop-blur-md"
         style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
       >
         <button
           onClick={handlePlaceOrder}
           disabled={placing || itemCount === 0}
-          className="py-4 px-6 w-full rounded-lg bg-white cursor-pointer text-blue-950 font-bold text-lg md:w-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mx-auto block w-full max-w-2xl rounded-xl bg-brand-700 py-4 text-lg font-bold text-white shadow-sm transition hover:bg-brand-800 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {placing
             ? 'Placing order…'
             : itemCount === 0
               ? 'Your cart is empty'
-              : `Place order · ₹${summary?.data?.totalAmount ?? 0}${paymentMethod === 'cod' ? ' (COD)' : ''}`}
+              : `Place order · ${formatPrice(summary?.data?.totalAmount ?? 0)}${paymentMethod === 'cod' ? ' (COD)' : ''}`}
         </button>
       </div>
     </div>

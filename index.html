@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>AwaitStore</title>
-    <meta name="description" content="Shop protein, vitamins and supplements. Works offline." />
-    <meta name="theme-color" content="#26457f" />
+    <title>AwaitStore – Protein, Vitamins & Supplements</title>
+    <meta name="description" content="Shop lab-tested protein, vitamins and supplements with free delivery and cash on delivery. Installable app that works offline." />
+    <meta name="theme-color" content="#1c3056" />
     <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon-180.png" />
@@ -13,9 +13,33 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="AwaitStore" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta property="og:title" content="AwaitStore – Protein, Vitamins & Supplements" />
+    <meta property="og:description" content="Lab-tested supplements, free delivery, cash on delivery." />
+    <meta property="og:image" content="/icons/icon-512.png" />
+    <!-- App shell: painted before any JavaScript runs, replaced when the app starts -->
+    <style>
+      body{margin:0;background:#f9fafb;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+      .sh-bar{height:32px;background:#1c3056}
+      .sh-head{height:64px;background:#fff;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;gap:8px;padding:0 16px;max-width:80rem;margin:0 auto;box-sizing:border-box}
+      .sh-name{font-weight:800;font-size:18px;letter-spacing:-.02em;color:#1c3056}.sh-name b{color:#c2410c;font-weight:800}
+      .sh-cats{height:44px;background:#fff;border-bottom:1px solid #e5e7eb}
+      .sh-wrap{background:#fff}
+      .sh-hero{margin:16px auto;max-width:calc(80rem - 32px);height:300px;border-radius:24px;background:linear-gradient(135deg,#121f38,#1c3056 50%,#26457f);margin-inline:16px}
+      @media (min-width:80rem){.sh-hero{margin-inline:auto}}
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="sh-bar"></div>
+      <div class="sh-wrap">
+        <div class="sh-head">
+          <svg width="30" height="36" viewBox="0 0 100 120" aria-hidden="true"><path d="M0 0H70A30 30 0 0 1 100 30V120H30A30 30 0 0 1 0 90Z" fill="#26457f"/><path d="M50 18L82 102H66L59 82H41L34 102H18ZM50 44L45 68H55Z" fill="#e6f2fb"/></svg>
+          <span class="sh-name">Await<b>Store</b></span>
+        </div>
+      </div>
+      <div class="sh-cats"></div>
+      <div class="sh-hero"></div>
+    </div>
     <noscript>AwaitStore needs JavaScript to run.</noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>

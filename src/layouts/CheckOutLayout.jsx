@@ -1,33 +1,35 @@
 import React from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { ArrowLeft, Lock } from "lucide-react";
+import logo from "../assets/logo/awaitstore-logo.svg";
 
 const CheckOutLayout = () => {
   const navigate = useNavigate();
 
-
-  const handleClose = () => {
-    navigate("/");
-  };
-
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
-      {/* ✅ Fixed Top Header */}
-      <div className="flex p-2.5 justify-between bg-blue-100 border-b border-gray-300 fixed top-0 left-0 right-0 z-10">
-        <h1 className="font-bold text-2xl">Order Summary</h1>
-        <button
-          onClick={handleClose}
-          className="bg-red-600 px-3 py-1 rounded-sm text-white cursor-pointer"
-        >
-          Cancel
-        </button>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <header className="sticky top-0 z-20 border-b border-gray-200/80 bg-white/90 backdrop-blur-md">
+        <div className="mx-auto flex h-14 max-w-2xl items-center gap-3 px-4">
+          <button
+            onClick={() => (window.history.length > 1 ? navigate(-1) : navigate("/"))}
+            className="-ml-2 rounded-full p-2 text-gray-700 hover:bg-gray-100"
+            aria-label="Go back"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <Link to="/" aria-label="AwaitStore home">
+            <img src={logo} alt="" width="22" height="26" className="h-[26px] w-[22px]" />
+          </Link>
+          <h1 className="text-lg font-bold">Checkout</h1>
+          <span className="ml-auto inline-flex items-center gap-1 text-xs font-medium text-emerald-700">
+            <Lock className="h-3.5 w-3.5" /> Secure checkout
+          </span>
+        </div>
+      </header>
 
-      {/* ✅ Scrollable Content Area */}
-      <main className="flex-1 overflow-y-auto mt-[60px] mb-[80px] p-3 bg-gray-50">
+      <main className="mx-auto max-w-2xl px-4 pb-32 pt-4">
         <Outlet />
-      
       </main>
-
       {/* The fixed "Place order" bar is rendered by CheckOutPage */}
     </div>
   );

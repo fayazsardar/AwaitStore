@@ -12,7 +12,13 @@ function App() {
     <>
     <OfflineBanner />
     <AppRoutes />
-    <ToastContainer />
+    <ToastContainer
+      position="top-center"
+      autoClose={2500}
+      hideProgressBar
+      newestOnTop
+      closeButton={false}
+    />
     <InstallBanner />
     <PwaPrompts />
     </>

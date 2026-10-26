@@ -8,7 +8,7 @@ const useSyncCartOnLogin = () => {
   const dispatch = useDispatch();
   const guestCartItems = useSelector((state) => state.cart.items);
 
-  const [syncGuestCart, { isLoading, isError, error }] = useSyncGuestCartMutation();
+  const [syncGuestCart] = useSyncGuestCartMutation();
 
   /**
    * 🧠 Merge duplicates by variantId

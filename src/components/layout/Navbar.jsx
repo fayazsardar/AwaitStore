@@ -8,9 +8,9 @@ import { useGetCartQuery } from "../../features/cart/api/cartApi";
 import { clearGuestCart } from "../../store/slices/cartSlice";
 
 const Navbar = ({ onCartClick }) => {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [, setMobileOpen] = useState(false);
   const [q, setQ] = useState("");
-  const [categories, setCategories] = useState([]);
+  const [categories] = useState([]);
   // const [loading, setLoading] = useState(true);
   const dispatch = useDispatch()
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
@@ -19,7 +19,6 @@ const Navbar = ({ onCartClick }) => {
 
 
 
-  const cart = useSelector((state) => state.cart.items);
 const cartItems=isAuthenticated ? (userCart?.data?.items || []) : guestItems;
 
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);

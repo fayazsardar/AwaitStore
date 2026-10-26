@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 let storedAuth = null
 try {
     storedAuth = JSON.parse(localStorage.getItem("auth"))
-} catch (e) {
+} catch {
    
     storedAuth = null
 }

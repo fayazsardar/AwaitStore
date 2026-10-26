@@ -10,7 +10,7 @@ const CartDrawer = ({ open, onClose }) => {
   const [shouldRender, setShouldRender] = useState(open);
   const [animate, setAnimate] = useState(false);
   const [loadingItemId, setLoadingItemId] = useState(null);
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutLoading] = useState(false);
   const navigate=useNavigate()
 
   const handleToCheckOut=()=>{

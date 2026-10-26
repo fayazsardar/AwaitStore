@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux"; // ✅ Import Redux hook
 import logo from "../../assets/logo/awaitstore-logo.svg";
 import { Satellite } from "lucide-react";
 import { logout } from "../../store/slices/authSlice";
-import { useGetCartQuery } from "../../features/cart/api/cartApi";
+import useCartCount from "../../features/cart/hooks/useCartCount";
 import { clearGuestCart } from "../../store/slices/cartSlice";
 import { useGetSubCategoriesQuery } from "../../pages/home/api/productHomeApi";
 
@@ -17,14 +17,7 @@ const Navbar = ({ onCartClick }) => {
   // const [loading, setLoading] = useState(true);
   const dispatch = useDispatch()
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
-  const guestItems = useSelector((state) => state.cart.items);
-  const { data: userCart } = useGetCartQuery(undefined, { skip: !isAuthenticated })
-
-
-
-const cartItems=isAuthenticated ? (userCart?.data?.items || []) : guestItems;
-
-  const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const cartCount = useCartCount();
 
 
 
@@ -187,7 +180,7 @@ const cartItems=isAuthenticated ? (userCart?.data?.items || []) : guestItems;
               <li key={cat._id} className="relative group">
                 <NavLink
                   to={`/categories/${cat._id}`} // 👈 dynamic category route
-                  className="block py-3 font-medium hover:text-blue-600 text-sm"
+                  className="block py-3 font-medium hover:text-blue-600 text-sm whitespace-nowrap"
                 >
                   {cat.name}
                 </NavLink>

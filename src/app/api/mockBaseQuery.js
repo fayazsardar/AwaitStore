@@ -9,11 +9,11 @@ const STORE_KEY = "awaitstore-mock-db";
 const load = () => {
   try {
     const db = JSON.parse(localStorage.getItem(STORE_KEY));
-    if (db && Array.isArray(db.cart) && Array.isArray(db.addresses)) return db;
+    if (db && Array.isArray(db.cart) && Array.isArray(db.addresses)) return { orders: [], ...db };
   } catch {
     // fall through to a fresh store
   }
-  return { cart: [], addresses: [] };
+  return { cart: [], addresses: [], orders: [] };
 };
 
 const save = (db) => {
@@ -48,6 +48,28 @@ const addToCart = (db, variantId, quantity) => {
   const existing = db.cart.find((i) => i.variantId === variantId);
   if (existing) existing.quantity += quantity;
   else db.cart.push({ variantId, quantity });
+};
+
+const summarizeCart = (db) => {
+  const orderItems = [];
+  const removedItems = [];
+  for (const { variantId, quantity } of db.cart) {
+    const found = findVariant(variantId);
+    if (!found) continue;
+    const { product, variant } = found;
+    const line = {
+      variantId,
+      productName: product.name,
+      image: variant.images[0],
+      weight: variant.weight,
+      weightType: variant.weightType,
+      flavor: variant.flavor,
+    };
+    if (quantity > variant.stock) removedItems.push({ ...line, availableStock: variant.stock });
+    else orderItems.push({ ...line, quantity, price: variant.price, subtotal: variant.price * quantity });
+  }
+  const totalAmount = orderItems.reduce((sum, i) => sum + i.subtotal, 0);
+  return { orderItems, removedItems, totalAmount };
 };
 
 const routes = [
@@ -104,19 +126,25 @@ const routes = [
     db.addresses = db.addresses.filter((a) => a._id !== id);
     return ok({ message: "Address deleted" });
   }],
-  ["GET", /^order\/initiate$/, (_, __, db) => {
-    const orderItems = [];
-    const removedItems = [];
-    for (const { variantId, quantity } of db.cart) {
-      const found = findVariant(variantId);
-      if (!found) continue;
-      const { product, variant } = found;
-      const line = { variantId, productName: product.name, weight: variant.weight, weightType: variant.weightType, flavor: variant.flavor };
-      if (quantity > variant.stock) removedItems.push({ ...line, availableStock: variant.stock });
-      else orderItems.push({ ...line, quantity, subtotal: variant.price * quantity });
-    }
-    const totalAmount = orderItems.reduce((sum, i) => sum + i.subtotal, 0);
-    return ok({ data: { orderItems, removedItems, totalAmount } });
+  ["GET", /^order\/initiate$/, (_, __, db) => ok({ data: summarizeCart(db) })],
+  ["GET", /^order$/, (_, __, db) => ok({ orders: [...db.orders].reverse() })],
+  ["POST", /^order$/, (_, body, db) => {
+    const address = db.addresses.find((a) => a._id === body?.addressId);
+    if (!address) return fail(400, "Choose a delivery address");
+    const { orderItems, totalAmount } = summarizeCart(db);
+    if (orderItems.length === 0) return fail(400, "Your cart is empty");
+    const order = {
+      _id: `ORD${Date.now().toString().slice(-8)}`,
+      createdAt: new Date().toISOString(),
+      status: body.paymentMethod === "cod" ? "Confirmed" : "Paid",
+      paymentMethod: body.paymentMethod === "cod" ? "cod" : "online",
+      address,
+      items: orderItems,
+      totalAmount,
+    };
+    db.orders.push(order);
+    db.cart = [];
+    return ok({ message: "Order placed", order });
   }],
 ];
 

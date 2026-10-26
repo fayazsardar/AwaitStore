@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from '../../pages/home/Home'
 import { Error404 } from '../../layouts/Error404'
@@ -6,21 +6,29 @@ import { Error404 } from '../../layouts/Error404'
 import RootLayout from '../../layouts/RootLayout'
 
 
-import ProductDetail from '../../features/products/pages/ProductDetail'
-import { CategoryPage } from '../../pages/category/pages/CategoryPage'
+const ProductDetail = lazy(() => import('../../features/products/pages/ProductDetail'))
+const CategoryPage = lazy(() => import('../../pages/category/pages/CategoryPage').then((m) => ({ default: m.CategoryPage })))
 import ProfileLayout from '../../layouts/ProfileLayout'
-import ProfileOverview from '../../features/profile/pages/ProfileOverview'
-import Addresses from '../../features/profile/pages/Addresses'
-import Orders from '../../features/profile/pages/Orders'
+const ProfileOverview = lazy(() => import('../../features/profile/pages/ProfileOverview'))
+const Addresses = lazy(() => import('../../features/profile/pages/Addresses'))
+const Orders = lazy(() => import('../../features/profile/pages/Orders'))
 import { PrivateRoute } from './PrivateRoute'
 import CheckOutLayout from '../../layouts/CheckOutLayout'
-import CheckOutPage from '../../pages/checkOut/pages/CheckOutPage'
-import PolicesPage from '../../features/policies/pages/PolicesPage'
-import TermsAndConditions from '../../features/policies/pages/TermsAndConditions'
-import CancellationAndRefund from '../../features/policies/pages/CancellationAndRefund'
-import ShippingAndDelivery from '../../features/policies/pages/ShippingAndDelivery'
-import ContactUs from '../../features/policies/pages/ContactUs'
-import SearchPage from '../../pages/search/SearchPage'
+const CheckOutPage = lazy(() => import('../../pages/checkOut/pages/CheckOutPage'))
+const PolicesPage = lazy(() => import('../../features/policies/pages/PolicesPage'))
+const TermsAndConditions = lazy(() => import('../../features/policies/pages/TermsAndConditions'))
+const CancellationAndRefund = lazy(() => import('../../features/policies/pages/CancellationAndRefund'))
+const ShippingAndDelivery = lazy(() => import('../../features/policies/pages/ShippingAndDelivery'))
+const ContactUs = lazy(() => import('../../features/policies/pages/ContactUs'))
+const SearchPage = lazy(() => import('../../pages/search/SearchPage'))
+
+// Pages below are split into their own files and loaded on first visit
+// (the service worker still precaches them all for offline use).
+const Page = ({ children }) => (
+  <Suspense fallback={<div className="py-10 text-center text-gray-400">Loading…</div>}>
+    {children}
+  </Suspense>
+)
 
 const AppRoutes = () => {
 
@@ -39,15 +47,15 @@ const AppRoutes = () => {
 
         {
           path: 'categories/:id',
-          element: <CategoryPage />
+          element: <Page><CategoryPage /></Page>
         },
         {
           path: 'product-detail/:id',
-          element: <ProductDetail />
+          element: <Page><ProductDetail /></Page>
         },
         {
           path: 'search',
-          element: <SearchPage />
+          element: <Page><SearchPage /></Page>
         }
 
       ],
@@ -61,16 +69,16 @@ const AppRoutes = () => {
           children: [
             {
               path: '',
-              element: <ProfileOverview />,
+              element: <Page><ProfileOverview /></Page>,
 
             },
             {
               path: 'addresses',
-              element: <Addresses />
+              element: <Page><Addresses /></Page>
             },
             {
               path: 'orders',
-              element: <Orders />
+              element: <Page><Orders /></Page>
             }
           ]
         }
@@ -97,7 +105,7 @@ const AppRoutes = () => {
           children: [
             {
               path: '',
-              element: <CheckOutPage />
+              element: <Page><CheckOutPage /></Page>
             }
           ]
         }
@@ -106,12 +114,12 @@ const AppRoutes = () => {
 
     {
       path:'/policies',
-      element:<PolicesPage />,
+      element:<Page><PolicesPage /></Page>,
        children: [
-    { path: 'terms', element: <TermsAndConditions /> },
-    { path: 'cancellation-refund', element: <CancellationAndRefund /> },
-    { path: 'shipping-delivery', element: <ShippingAndDelivery /> },
-    { path: 'contact-us', element: <ContactUs /> },
+    { path: 'terms', element: <Page><TermsAndConditions /></Page> },
+    { path: 'cancellation-refund', element: <Page><CancellationAndRefund /></Page> },
+    { path: 'shipping-delivery', element: <Page><ShippingAndDelivery /></Page> },
+    { path: 'contact-us', element: <Page><ContactUs /></Page> },
   ],
     }
 

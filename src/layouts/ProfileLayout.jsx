@@ -1,6 +1,6 @@
 
 import {  NavLink, Outlet } from "react-router-dom";
-import { Navbar } from "../components";
+import { Navbar, BottomNav } from "../components";
 
 import { useState } from "react";
 import CartDrawer from "../features/cart/components/CartDrawer";
@@ -24,7 +24,7 @@ const ProfileLayout = () => {
         onClose={() => setCartOpen(false)} 
        
       />
-      <div className="min-h-screen fixed w-full flex flex-col md:flex-row bg-amber-200">
+      <div className="min-h-screen w-full flex flex-col md:flex-row bg-amber-200 pb-16 md:pb-0">
         {/* Sidebar (desktop) */}
         <aside className="hidden md:block w-64 bg-white shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-8">My Account</h2>
@@ -42,6 +42,7 @@ const ProfileLayout = () => {
           <Outlet />
         </main>
       </div>
+      <BottomNav onCartClick={() => setCartOpen(true)} />
     </>
   );
 };

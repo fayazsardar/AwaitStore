@@ -5,7 +5,7 @@ const ProfileOverview = () => {
  
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-4">Welcome back! <span> {user?.firstName }</span></h1>
+      <h1 className="text-2xl font-semibold mb-4">Welcome back! <span> {user?.firstName || user?.name || user?.mobileNumber}</span></h1>
       <p className="text-gray-600">Here you can manage your profile, orders, and settings.</p>
     </div>
   );

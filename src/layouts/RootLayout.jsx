@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 import { useState } from "react";
 
 
-import { Navbar, Footer } from "../components/index";
+import { Navbar, Footer, BottomNav } from "../components/index";
 import CartDrawer from "../features/cart/components/CartDrawer";
 
 const RootLayout = () => {
@@ -13,7 +13,7 @@ const RootLayout = () => {
   const [cartOpen, setCartOpen] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen pb-16 md:pb-0">
       {/* Navbar */}
       <Navbar onCartClick={() => setCartOpen(true)} />
 
@@ -31,6 +31,8 @@ const RootLayout = () => {
 
       {/* Footer */}
       <Footer />
+
+      <BottomNav onCartClick={() => setCartOpen(true)} />
     </div>
   );
 };

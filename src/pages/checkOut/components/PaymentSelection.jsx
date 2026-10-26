@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
-const PaymentSelection = () => {
-  const [selectedMethod, setSelectedMethod] = useState("razorpay");
+const PaymentSelection = ({ selectedMethod, setSelectedMethod }) => {
 
   return (
     <div className="border border-gray-300 rounded-md p-4 bg-gray-50 shadow-sm">

@@ -38,11 +38,15 @@ const CheckOutAdressBox = ({ address, onAdd, onChange, isLoading }) => {
             </div>
           </div>
         ) : (
-          <p className="text-gray-500 italic"
-          onClick={onAdd}
-          >
-            No address selected. Please add or select an address.
-          </p>
+          <div className="flex flex-col items-start gap-2">
+            <p className="text-gray-500 italic">No delivery address yet.</p>
+            <button
+              onClick={onAdd}
+              className="px-3 py-1.5 bg-blue-600 text-white rounded-sm hover:bg-blue-700 transition"
+            >
+              + Add delivery address
+            </button>
+          </div>
         )}
       </div>
     </div>

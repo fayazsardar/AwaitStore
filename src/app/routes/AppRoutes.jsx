@@ -1,0 +1,125 @@
+import React from 'react'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Home from '../../pages/home/Home'
+import { Error404 } from '../../layouts/Error404'
+
+import RootLayout from '../../layouts/RootLayout'
+
+
+import ProductDetail from '../../features/products/pages/ProductDetail'
+import { CategoryPage } from '../../pages/category/pages/CategoryPage'
+import ProfileLayout from '../../layouts/ProfileLayout'
+import ProfileOverview from '../../features/profile/pages/ProfileOverview'
+import Addresses from '../../features/profile/pages/Addresses'
+import Orders from '../../features/profile/pages/Orders'
+import { PrivateRoute } from './PrivateRoute'
+import CheckOutLayout from '../../layouts/CheckOutLayout'
+import CheckOutPage from '../../pages/checkOut/pages/CheckOutPage'
+import PolicesPage from '../../features/policies/pages/PolicesPage'
+import TermsAndConditions from '../../features/policies/pages/TermsAndConditions'
+import CancellationAndRefund from '../../features/policies/pages/CancellationAndRefund'
+import ShippingAndDelivery from '../../features/policies/pages/ShippingAndDelivery'
+import ContactUs from '../../features/policies/pages/ContactUs'
+
+const AppRoutes = () => {
+
+
+
+  const appRouter = createBrowserRouter([
+    {
+      path: '/',
+      element: <RootLayout />,
+      errorElement: <Error404 />,
+      children: [
+        {
+          path: "/",
+          element: <Home />
+        },
+
+        {
+          path: 'categories/:id',
+          element: <CategoryPage />
+        },
+        {
+          path: 'product-detail/:id',
+          element: <ProductDetail />
+        }
+
+      ],
+    },
+    {
+      path: '/profile',
+      element: <PrivateRoute />,
+      children: [
+        {
+          element: <ProfileLayout />,
+          children: [
+            {
+              path: '',
+              element: <ProfileOverview />,
+
+            },
+            {
+              path: 'addresses',
+              element: <Addresses />
+            },
+            {
+              path: 'orders',
+              element: <Orders />
+            }
+          ]
+        }
+
+      ]
+
+    },
+    // {
+    //   path: '/checkout',
+    //   element: <CheckOutLayout />,
+    //   children: [
+    //     {
+    //       path: '',
+    //       element: <CheckOutPage />
+    //     }
+    //   ]
+    // }
+    {
+      path: '/checkout',
+      element: <PrivateRoute />,      // ✅ protect the route here
+      children: [
+        {
+          element: <CheckOutLayout />,
+          children: [
+            {
+              path: '',
+              element: <CheckOutPage />
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      path:'/policies',
+      element:<PolicesPage />,
+       children: [
+    { path: 'terms', element: <TermsAndConditions /> },
+    { path: 'cancellation-refund', element: <CancellationAndRefund /> },
+    { path: 'shipping-delivery', element: <ShippingAndDelivery /> },
+    { path: 'contact-us', element: <ContactUs /> },
+  ],
+    }
+
+
+  ]
+  )
+
+
+
+
+  return (
+    <RouterProvider router={appRouter} />
+  )
+}
+
+export default AppRoutes

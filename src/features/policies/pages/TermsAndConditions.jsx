@@ -4,14 +4,14 @@ const TermsAndConditions = () => (
   <div>
     <h1 className="text-2xl font-semibold mb-4">Terms and Conditions</h1>
     <p className="mb-3">
-      Welcome to Nutraline. By accessing or purchasing from our website, you
+      Welcome to AwaitStore. By accessing or purchasing from our website, you
       agree to comply with our terms and policies.
     </p>
     <ul className="list-disc ml-6 space-y-2">
       <li>All products are for personal use and not for resale.</li>
       <li>Prices and availability are subject to change without notice.</li>
       <li>
-        Nutraline reserves the right to cancel any order due to pricing errors
+        AwaitStore reserves the right to cancel any order due to pricing errors
         or stock unavailability.
       </li>
       <li>

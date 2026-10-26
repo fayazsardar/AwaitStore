@@ -10,7 +10,7 @@ const ContactUs = () => (
       <li>Email: <strong>nutralineindia@gmail.com</strong></li>
       <li>Phone: 91 9188642139</li>
       <li>Working Hours: Monday – Saturday, 10 AM to 6 PM</li>
-      <li>Address: Nutraline HQ, Kochi, Kerala, India</li>
+      <li>Address: AwaitStore HQ, Kochi, Kerala, India</li>
     </ul>
   </div>
 );

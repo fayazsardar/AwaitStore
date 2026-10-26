@@ -7,7 +7,6 @@ const CartItemBox = ({
   loadingItemId,
   handleQtyChange,
   handleRemove,
-  checkoutLoading,
 }) => {
   const idToUse = variant?._id ?? item._id;
   const price = variant?.price ?? item.price ?? 0;
@@ -36,11 +35,11 @@ const CartItemBox = ({
             <input
               type="number"
               min="1"
-              disabled={loadingItemId === idToUse || checkoutLoading}
+              disabled={loadingItemId === idToUse}
               value={item.quantity}
               onChange={(e) => handleQtyChange(item._id, Number(e.target.value))}
               className={`w-16 text-center border rounded px-1 py-0.5 ml-2 focus:outline-none focus:ring-1 focus:ring-purple-500 ${
-                loadingItemId === idToUse || checkoutLoading ? "opacity-50 cursor-not-allowed" : ""
+                loadingItemId === idToUse ? "opacity-50 cursor-not-allowed" : ""
               }`}
               aria-label={`Quantity for ${item.name}`}
             />
@@ -56,7 +55,6 @@ const CartItemBox = ({
         ) : (
           <button
             onClick={() => handleRemove(idToUse)}
-            disabled={checkoutLoading}
             className="text-red-500 hover:text-red-600 text-xl font-bold cursor-pointer"
             aria-label={`Remove ${item.name} from cart`}
           >

@@ -4,7 +4,7 @@ const ShippingAndDelivery = () => (
   <div>
     <h1 className="text-2xl font-semibold mb-4">Shipping & Delivery Policy</h1>
     <p className="mb-3">
-      Nutraline offers PAN India delivery to ensure your supplements reach you
+      AwaitStore offers PAN India delivery to ensure your supplements reach you
       safely and promptly.
     </p>
     <ul className="list-disc ml-6 space-y-2">

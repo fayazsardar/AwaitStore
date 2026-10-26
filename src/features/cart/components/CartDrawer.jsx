@@ -10,12 +10,11 @@ const CartDrawer = ({ open, onClose }) => {
   const [shouldRender, setShouldRender] = useState(open);
   const [animate, setAnimate] = useState(false);
   const [loadingItemId, setLoadingItemId] = useState(null);
-  const [checkoutLoading] = useState(false);
   const navigate=useNavigate()
 
   const handleToCheckOut=()=>{
-    navigate('/checkOut')
-
+    onClose()
+    navigate('/checkout')
   }
 
   const dispatch = useDispatch();
@@ -85,7 +84,8 @@ const CartDrawer = ({ open, onClose }) => {
     0
   );
 
-  const isAnyLoading = loadingItemId !== null || checkoutLoading;
+  const isAnyLoading = loadingItemId !== null;
+  const canCheckout = items.length > 0 && !isAnyLoading;
 
   return (
     <div
@@ -131,7 +131,6 @@ const CartDrawer = ({ open, onClose }) => {
                   item={item}
                   variant={variant}
                   loadingItemId={loadingItemId}
-                  checkoutLoading={checkoutLoading}
                   handleQtyChange={handleQtyChange}
                   handleRemove={handleRemove}
                   isAuthenticated={isAuthenticated}
@@ -146,9 +145,9 @@ const CartDrawer = ({ open, onClose }) => {
           <p className="font-semibold text-lg">Total: ₹{total}</p>
           <button
           onClick={handleToCheckOut}
-            disabled={isAnyLoading}
+            disabled={!canCheckout}
             className={`w-full rounded-xl px-4 py-2 text-white cursor-pointer ${
-              isAnyLoading ? "bg-gray-400 cursor-not-allowed" : "bg-gray-900 hover:bg-gray-800"
+              canCheckout ? "bg-gray-900 hover:bg-gray-800" : "bg-gray-400 cursor-not-allowed"
             }`}
           >
             {isAnyLoading ? "Processing..." : "Checkout"}

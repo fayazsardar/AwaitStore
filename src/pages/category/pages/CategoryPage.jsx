@@ -10,12 +10,9 @@ import NoDataFoundBox from '../../../components/common/NoDataFoundBox'
 
 export const CategoryPage = () => {
     const { id } = useParams();
-    console.log("category: ", id)
 
     const { data: productsByCategory, isLoading: loadingProducts } = useFetchProductsByCategoryQuery(id);
 
-    console.log(loadingProducts)
-    console.log(productsByCategory)
 
 
 
@@ -31,7 +28,6 @@ export const CategoryPage = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
 
-                <h1 className="text-2xl font-bold capitalize">Supplements</h1>
                 <h1 className="text-2xl font-bold capitalize">Supplements</h1>
 
                 {/* Sort Dropdown */}

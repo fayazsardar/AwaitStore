@@ -1,16 +1,19 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"; // ✅ Import Redux hook
 import logo from "../../assets/logo/awaitstore-logo.svg";
 import { Satellite } from "lucide-react";
 import { logout } from "../../store/slices/authSlice";
 import { useGetCartQuery } from "../../features/cart/api/cartApi";
 import { clearGuestCart } from "../../store/slices/cartSlice";
+import { useGetSubCategoriesQuery } from "../../pages/home/api/productHomeApi";
 
 const Navbar = ({ onCartClick }) => {
-  const [, setMobileOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [q, setQ] = useState("");
-  const [categories] = useState([]);
+  const navigate = useNavigate();
+  const { data: categoryData } = useGetSubCategoriesQuery();
+  const categories = categoryData?.categories || [];
   // const [loading, setLoading] = useState(true);
   const dispatch = useDispatch()
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
@@ -27,7 +30,10 @@ const cartItems=isAuthenticated ? (userCart?.data?.items || []) : guestItems;
 
   const onSearch = (e) => {
     e.preventDefault();
-    window.location.href = `/search?q=${encodeURIComponent(q.trim())}`;
+    const term = q.trim();
+    if (!term) return;
+    setMobileOpen(false);
+    navigate(`/search?q=${encodeURIComponent(term)}`);
   };
 
   const handleLogOut = () => {
@@ -51,7 +57,9 @@ const cartItems=isAuthenticated ? (userCart?.data?.items || []) : guestItems;
           <div className="flex items-center gap-3">
             <button
               className="inline-flex h-10 w-10 items-center justify-center rounded-xl border md:hidden"
-              onClick={() => setMobileOpen(true)}
+              onClick={() => setMobileOpen((open) => !open)}
+              aria-label="Toggle search"
+              aria-expanded={mobileOpen}
             >
               <svg
                 viewBox="0 0 24 24"
@@ -69,7 +77,7 @@ const cartItems=isAuthenticated ? (userCart?.data?.items || []) : guestItems;
                 <img src={logo} alt="AwaitStore" />
               </div>
               <span className="text-lg font-semibold tracking-tight">
-                NutraLine
+                AwaitStore
               </span>
             </Link>
           </div>
@@ -157,6 +165,19 @@ const cartItems=isAuthenticated ? (userCart?.data?.items || []) : guestItems;
           </div>
         </div>
       </div>
+
+      {/* --- Mobile Search --- */}
+      {mobileOpen && (
+        <form onSubmit={onSearch} className="px-4 pb-3 md:hidden">
+          <input
+            className="w-full rounded-2xl border px-4 py-2.5 outline-none focus:ring-2"
+            placeholder="Search products, brands…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            autoFocus
+          />
+        </form>
+      )}
 
       {/* --- Categories Row --- */}
       <nav className="bg-gray-50 border-t border-gray-200 scrollbar-hide overflow-x-scroll">

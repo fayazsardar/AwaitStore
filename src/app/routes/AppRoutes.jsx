@@ -20,6 +20,7 @@ import TermsAndConditions from '../../features/policies/pages/TermsAndConditions
 import CancellationAndRefund from '../../features/policies/pages/CancellationAndRefund'
 import ShippingAndDelivery from '../../features/policies/pages/ShippingAndDelivery'
 import ContactUs from '../../features/policies/pages/ContactUs'
+import SearchPage from '../../pages/search/SearchPage'
 
 const AppRoutes = () => {
 
@@ -43,6 +44,10 @@ const AppRoutes = () => {
         {
           path: 'product-detail/:id',
           element: <ProductDetail />
+        },
+        {
+          path: 'search',
+          element: <SearchPage />
         }
 
       ],

@@ -87,3 +87,10 @@
         transition-duration: 0.01ms !important;
     }
 }
+
+/* Printing (e.g. order invoice): plain white page, no shadows or toasts */
+@media print {
+    body { background: #fff; }
+    .Toastify { display: none; }
+    * { box-shadow: none !important; }
+}

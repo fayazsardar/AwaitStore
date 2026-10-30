@@ -25,6 +25,11 @@ const authSlice = createSlice({
             state.isAuthenticated = true;
             localStorage.setItem("auth", JSON.stringify({ user, token }))
         },
+        // Merge profile changes (e.g. name/email edited in My account) into the stored user
+        updateUser: (state, action) => {
+            state.user = { ...state.user, ...action.payload };
+            localStorage.setItem("auth", JSON.stringify({ user: state.user, token: state.token }))
+        },
         logout: (state) => {
             state.user = null;
             state.token = null,
@@ -38,7 +43,7 @@ const authSlice = createSlice({
 })
 
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, updateUser, logout } = authSlice.actions;
 export default authSlice.reducer
 
 

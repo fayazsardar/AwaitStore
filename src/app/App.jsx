@@ -17,6 +17,7 @@ function App() {
       autoClose={2500}
       hideProgressBar
       newestOnTop
+      limit={2}
       closeButton={false}
     />
     <InstallBanner />

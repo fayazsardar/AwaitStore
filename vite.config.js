@@ -51,7 +51,7 @@ export default defineConfig({
         ],
         shortcuts: [
           { name: 'Search products', short_name: 'Search', url: '/search', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
-          { name: 'My orders', short_name: 'Orders', url: '/profile/orders', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+          { name: 'My orders', short_name: 'Orders', url: '/account/orders', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
           { name: 'Checkout', short_name: 'Checkout', url: '/checkout', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
         ],
       },

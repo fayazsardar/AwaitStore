@@ -8,20 +8,15 @@ export const orderApi=privateApiSlice.injectEndpoints({
             query:()=>'order/initiate',
             providesTags: ['Order'],
         }),
-        getOrders:build.query({
-            query:()=>'order',
-            providesTags: ['Orders'],
-            transformResponse: (response) => response.orders,
-        }),
         placeOrder:build.mutation({
             query:(body)=>({
                 url:'order',
                 method:'POST',
                 body,
             }),
-            invalidatesTags: ['Cart', 'Order', 'Orders'],
+            invalidatesTags: ['Cart', 'Order', { type: 'Orders', id: 'LIST' }],
         })
     })
 })
 
-export const { useInitiateOrderQuery, useGetOrdersQuery, usePlaceOrderMutation } = orderApi;
+export const { useInitiateOrderQuery, usePlaceOrderMutation } = orderApi;

@@ -13,10 +13,13 @@ const loadSearchPage = () => import('../../pages/search/SearchPage')
 
 const ProductDetail = lazy(loadProductDetail)
 const CategoryPage = lazy(() => loadCategoryPage().then((m) => ({ default: m.CategoryPage })))
-import ProfileLayout from '../../layouts/ProfileLayout'
-const ProfileOverview = lazy(() => import('../../features/profile/pages/ProfileOverview'))
-const Addresses = lazy(() => import('../../features/profile/pages/Addresses'))
-const Orders = lazy(() => import('../../features/profile/pages/Orders'))
+import AccountLayout from '../../features/account/components/AccountLayout'
+const AccountOverview = lazy(() => import('../../features/account/pages/AccountOverview'))
+const OrdersPage = lazy(() => import('../../features/account/pages/OrdersPage'))
+const OrderDetailPage = lazy(() => import('../../features/account/pages/OrderDetailPage'))
+const AddressesPage = lazy(() => import('../../features/account/pages/AddressesPage'))
+const ProfilePage = lazy(() => import('../../features/account/pages/ProfilePage'))
+const SettingsPage = lazy(() => import('../../features/account/pages/SettingsPage'))
 import { PrivateRoute } from './PrivateRoute'
 import CheckOutLayout from '../../layouts/CheckOutLayout'
 const CheckOutPage = lazy(() => import('../../pages/checkOut/pages/CheckOutPage'))
@@ -89,31 +92,27 @@ const appRouter = createBrowserRouter([
       ],
     },
     {
-      path: '/profile',
+      path: '/account',
       element: <PrivateRoute />,
+      errorElement: <Error404 />,
       children: [
         {
-          element: <ProfileLayout />,
+          element: <AccountLayout />,
           children: [
-            {
-              path: '',
-              element: <Page><ProfileOverview /></Page>,
-
-            },
-            {
-              path: 'addresses',
-              element: <Page><Addresses /></Page>
-            },
-            {
-              path: 'orders',
-              element: <Page><Orders /></Page>
-            }
-          ]
-        }
-
-      ]
-
+            { index: true, element: <Page><AccountOverview /></Page> },
+            { path: 'orders', element: <Page><OrdersPage /></Page> },
+            { path: 'orders/:orderId', element: <Page><OrderDetailPage /></Page> },
+            { path: 'addresses', element: <Page><AddressesPage /></Page> },
+            { path: 'profile', element: <Page><ProfilePage /></Page> },
+            { path: 'settings', element: <Page><SettingsPage /></Page> },
+          ],
+        },
+      ],
     },
+    // Old /profile links (bookmarks, installed-app shortcuts) keep working
+    { path: '/profile', element: <Navigate to="/account" replace /> },
+    { path: '/profile/orders', element: <Navigate to="/account/orders" replace /> },
+    { path: '/profile/addresses', element: <Navigate to="/account/addresses" replace /> },
     // {
     //   path: '/checkout',
     //   element: <CheckOutLayout />,

@@ -14,7 +14,7 @@ const privateApiSlice = createApi({
       return headers;
     },
   }),
-  tagTypes: ["User", "Address", "Orders", "Order", "Cart"],
+  tagTypes: ["Profile", "Preferences", "Addresses", "Orders", "Order", "Cart"],
   endpoints: () => ({}),
 });
 

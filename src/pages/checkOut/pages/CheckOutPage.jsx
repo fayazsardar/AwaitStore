@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import CheckOutAdressBox from '../components/CheckOutAdressBox'
-import { useGetAddressesQuery } from '../../../features/profile/api/profileApi'
+import { useGetAddressesQuery } from '../../../features/account/api/accountApi'
 import CheckOutAddressModal from '../components/CheckOutAddressModal'
 import CouponBox from '../../../features/auth/coupons/components/CouponBox'
 import OrderSummaryAccordion from '../components/OrderSummaryAccordion'
 import PaymentSelection from '../components/PaymentSelection'
 
 import { useGetCartQuery } from '../../../features/cart/api/cartApi'
-import AddAddressModal from '../../../features/profile/components/AddAddressModal'
+import AddressFormModal from '../../../features/account/components/AddressFormModal'
 import { useInitiateOrderQuery, usePlaceOrderMutation } from '../api/orderApi'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -39,7 +39,7 @@ const CheckOutPage = () => {
     try {
       const res = await placeOrder({ addressId: selectedAddress._id, paymentMethod }).unwrap()
       toast.success(`Order ${res.order._id} placed!`)
-      navigate('/profile/orders', { replace: true, state: { placedOrderId: res.order._id } })
+      navigate(`/account/orders/${res.order._id}`, { replace: true, state: { justPlaced: true } })
     } catch (err) {
       toast.error(err?.data?.message || 'Could not place order')
     }
@@ -75,8 +75,9 @@ const CheckOutPage = () => {
 
        {!cartLoading && <OrderSummaryAccordion cartData={cartData} />}
 
-       {isAddAddressModal && <AddAddressModal
-       handelClose={(()=>setIsAddAddressModal(false))} />}
+       {isAddAddressModal && <AddressFormModal
+       onClose={() => setIsAddAddressModal(false)}
+       onSaved={(addr) => addr && setSelectedAddress(addr)} />}
       {isModalOpen && (
         <CheckOutAddressModal
         addresses={addressData}

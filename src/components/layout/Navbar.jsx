@@ -46,7 +46,7 @@ const Navbar = ({ onCartClick }) => {
   return (
     <>
       {/* Announcement bar */}
-      <div className="bg-brand-900 text-white">
+      <div className="bg-brand-900 text-white print:hidden">
         <p className="page flex h-8 items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-xs font-medium">
           <span>Free delivery on every order</span>
           <span aria-hidden="true" className="text-brand-300">•</span>
@@ -56,7 +56,7 @@ const Navbar = ({ onCartClick }) => {
         </p>
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-gray-200/80 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/80">
+      <header className="sticky top-0 z-40 print:hidden border-b border-gray-200/80 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/80">
         <div className="page flex h-16 items-center gap-3 md:gap-6">
           <button
             className="-ml-1 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-700 hover:bg-gray-100 md:hidden"
@@ -78,7 +78,7 @@ const Navbar = ({ onCartClick }) => {
 
           <div className="ml-auto flex items-center gap-1">
             <NavLink
-              to="/profile"
+              to="/account"
               className="hidden items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 sm:inline-flex"
             >
               <User className="h-5 w-5" />

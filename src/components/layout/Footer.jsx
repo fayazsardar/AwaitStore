@@ -47,7 +47,7 @@ const Footer = () => {
         <div>
           <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-white">Help</h3>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/profile/orders" className={linkClass}>My orders</Link></li>
+            <li><Link to="/account/orders" className={linkClass}>My orders</Link></li>
             <li><Link to="/policies/contact-us" className={linkClass}>Contact us</Link></li>
             <li><Link to="/policies/shipping-delivery" className={linkClass}>Shipping & delivery</Link></li>
             <li><Link to="/policies/cancellation-refund" className={linkClass}>Cancellation & refunds</Link></li>

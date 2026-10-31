@@ -47,6 +47,28 @@ Colours, font and spacing are defined once as design tokens in `src/index.css`
 - React, React Router and Redux are split into separate long-cached files.
 - Images reserve their space and placeholders match real content, so nothing jumps while loading.
 
+## My account (`src/features/account`)
+
+Self-contained feature module behind login (`/account`, old `/profile` links redirect):
+
+| Route | Page |
+|---|---|
+| `/account` | Overview: profile card, stats, latest order (phones: section menu) |
+| `/account/orders` | Orders with All / In progress / Delivered / Cancelled filters (`?status=`) |
+| `/account/orders/:orderId` | Tracking timeline, items, address, payment & price breakdown; cancel, buy again, print invoice |
+| `/account/addresses` | Add, edit, set default, delete (with confirmation) |
+| `/account/profile` | Name, email, gender, date of birth (mobile number is the login and read-only) |
+| `/account/settings` | Notification switches, install app, log out, delete account |
+
+- `api/accountApi.js`: all account endpoints (RTK Query, cache tags per order). Endpoints expected
+  from a real backend: `GET/PATCH profile`, `GET/PATCH preferences`, `DELETE account`, `GET order`,
+  `GET order/:id`, `PATCH order/:id/cancel`, `GET/POST address`, `PATCH address/:id`,
+  `PATCH address/:id/default`, `DELETE address/:id` (all under `/api/user/`).
+- `components/`: layout, address form, order status badge and timeline, page header.
+- `hooks/useLogout.js`: logs out and clears all cached private data.
+- In dummy mode, order status advances with time (packed after 30 min, shipped 3 h,
+  out for delivery 24 h, delivered 48 h) and can be cancelled until it ships.
+
 ## Dummy backend
 
 By default the app needs no server: every API call is answered in the browser by

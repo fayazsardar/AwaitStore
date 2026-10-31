@@ -14,7 +14,7 @@ const BottomNav = () => {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 flex border-t border-gray-200 bg-white/95 backdrop-blur-md md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 flex print:hidden border-t border-gray-200 bg-white/95 backdrop-blur-md md:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       aria-label="Main"
     >
@@ -32,7 +32,7 @@ const BottomNav = () => {
           </span>
         )}
       </button>
-      <NavLink to="/profile" className={tabClass}>
+      <NavLink to="/account" className={tabClass}>
         <User className="h-5 w-5" /> Account
       </NavLink>
     </nav>

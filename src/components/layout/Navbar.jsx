@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Menu, Search, ShoppingBag, User, X } from "lucide-react";
+import { Search, ShoppingBag, User, X } from "lucide-react";
 import logo from "../../assets/logo/awaitstore-logo.svg";
 import useCartCount from "../../features/cart/hooks/useCartCount";
 import { useGetSubCategoriesQuery } from "../../pages/home/api/productHomeApi";
@@ -64,7 +64,7 @@ const Navbar = ({ onCartClick }) => {
             aria-label="Toggle search"
             aria-expanded={mobileOpen}
           >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
           </button>
 
           <Link to="/" className="flex shrink-0 items-center gap-2" aria-label="AwaitStore home">
